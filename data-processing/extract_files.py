@@ -10,6 +10,9 @@ def main():
     # Define additional files to exclude
     EXCLUDED_FILES = {'extracted_contents.txt', 'extract_files.py'}
 
+    # Define directories to exclude (e.g., virtual environments)
+    EXCLUDED_DIRS = {'venv', 'myenv', 'env', '__pycache__'}
+
     # Set up argument parsing
     parser = argparse.ArgumentParser(description="Extract specific file types into a single text file.")
     parser.add_argument(
@@ -39,8 +42,11 @@ def main():
         for dirpath, dirnames, filenames in os.walk(root_dir):
             current_dir = Path(dirpath)
 
-            # Modify dirnames in-place to exclude hidden directories and 'venv'
-            dirnames[:] = [d for d in dirnames if not d.startswith('.') and d.lower() != 'venv']
+            # Modify dirnames in-place to exclude hidden directories and those in EXCLUDED_DIRS
+            dirnames[:] = [
+                d for d in dirnames 
+                if not d.startswith('.') and d.lower() not in EXCLUDED_DIRS
+            ]
 
             for filename in filenames:
                 if filename.startswith('.'):
@@ -75,6 +81,9 @@ def main():
                             outfile.write(content)
                     
                     outfile.write("```\n\n")
+                except UnicodeDecodeError as ude:
+                    print(f"Warning: Could not decode file '{file_path}': {ude}")
+                    continue
                 except Exception as e:
                     print(f"Warning: Could not read file '{file_path}': {e}")
                     continue
