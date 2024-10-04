@@ -5,7 +5,7 @@ def main():
     from pathlib import Path
 
     # Define the file extensions to include
-    INCLUDED_EXTENSIONS = {'.py', '.css', '.txt', '.json', '.csv'}
+    INCLUDED_EXTENSIONS = {'.py', '.css', '.txt', '.json', '.csv', '.md'}
 
     # Define additional files to exclude
     EXCLUDED_FILES = {'extracted_contents.txt', 'extract_files.py'}
